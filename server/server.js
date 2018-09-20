@@ -84,3 +84,6 @@ app.listen(8080,()=>{
 // },(err)=>{
 //   console.log('unable to save')
 // });
+
+
+module.exports={app};
