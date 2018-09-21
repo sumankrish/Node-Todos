@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start":"node server/server.js",
+    "start": "node server/server.js",
     "test": "mocha server/**/*.test.js"
   },
-  "engines":{
-    "node":"10.9.0"
+  "engines": {
+    "node": "10.9.0"
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +16,7 @@
     "body-parser": "^1.18.3",
     "expect": "^23.6.0",
     "express": "^4.16.3",
+    "lodash": "^4.17.11",
     "mocha": "^5.2.0",
     "mongodb": "^3.1.6",
     "mongoose": "^5.2.15",
