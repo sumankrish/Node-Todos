@@ -1,6 +1,7 @@
 const {ObjectID} = require('mongodb');
 const _= require('lodash');
 
+
 var express = require('express');
 
 var bodyParser = require('body-parser');
@@ -159,10 +160,15 @@ app.post('/user',(req,res)=>{
 
 var body=_.pick(req.body,['email','password']);
 
+console.log(body);
+
 var user = new User(body);
 
-user.save().then((user)=>{
+console.log('server 1');
+
+user.save().then(()=>{
   //res.send(user);
+console.log('server 2');
 
   return user.generateAuthToken();
 }).then((token)=>{
@@ -176,9 +182,11 @@ user.save().then((user)=>{
 app.get('/user/me',authenticate,(req,res)=>{
 
 console.log('enter in server');
-res.send(req.user);
+res.send(req.Users);
 
 });
+
+
 
 app.listen(port,()=>{
   console.log(`Server is up and running on ${port}`);

@@ -2,6 +2,7 @@ const validator = require('validator');
 var mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
+const bcrypt=require('bcryptjs');
 
 var USerSchema = new mongoose.Schema({
 email:{
@@ -41,15 +42,23 @@ USerSchema.methods.toJSON = function(){
 };
 
 USerSchema.methods.generateAuthToken = function(){
+
+  console.log('inside gene');
   var user = this;
   var access = 'auth';
   var token=jwt.sign({_id:user._id.toHexString(),access},'abc123').toString();
+
+console.log('user 1');
 
   user.tokens.push({access,token});
 
   //user.tokens=user.tokens.concat([{access,token}]);
 
+console.log('user 2');
+
   return user.save().then(()=>{
+
+    console.log(token);
     return token;
   });
 };
@@ -71,12 +80,37 @@ try{
 }
 
 return Users.findOne({
-  'id' : decoded._id,
+  '_id' : decoded._id,
   'tokens.token':token,
   'tokens.access':'auth'
 });
 
 };
 
+USerSchema.pre('save',function(next){
+
+  console.log('pre 1');
+var user=this;
+if(user.isModified('password')){
+
+  console.log('pre 2');
+
+bcrypt.genSalt(10,(err,salt)=>{
+
+  console.log('pre 3',salt);
+
+bcrypt.hash(user.password,salt,(err,hash)=>{
+  user.password=hash;
+  console.log(hash);
+  next();
+});
+
+});
+
+}else{
+  next();
+}
+
+});
 var User = mongoose.model('User',USerSchema);
 module.exports={User};
