@@ -14,6 +14,8 @@ var{Todo} = require('./models/todo');
 
 var{User} = require('./models/Users');
 
+var { authenticate}=require('./middleware/authenticate');
+
 
 var app=express();
 
@@ -168,6 +170,13 @@ user.save().then((user)=>{
 }).catch((e)=>{
   res.status(400).send(e)
 });
+
+});
+
+app.get('/user/me',authenticate,(req,res)=>{
+
+console.log('enter in server');
+res.send(req.user);
 
 });
 
