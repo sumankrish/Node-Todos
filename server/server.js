@@ -38,23 +38,23 @@ res.send(result);
 
 });
 
-app.post('/user',(req,res)=>{
-
-var user=new User({
-
-email : req.body.email
-
-});
-
-user.save().then((result)=>{
-res.send(result);
-
-},(err)=>{
-
-  res.status(400).send(err);
-});
-
-});
+// app.post('/user',(req,res)=>{
+//
+// var user=new User({
+//
+// email : req.body.email
+//
+// });
+//
+// user.save().then((result)=>{
+// res.send(result);
+//
+// },(err)=>{
+//
+//   res.status(400).send(err);
+// });
+//
+// });
 
 app.get('/todos',(req,res)=>{
 Todo.find().then((todos)=>{
@@ -149,6 +149,25 @@ Todo.findByIdAndUpdate(id,{$set : body},{new : true}).then((todo)=>{
 }).catch((e)=>{
   res.status(400).send();
 })
+
+});
+
+
+app.post('/user',(req,res)=>{
+
+var body=_.pick(req.body,['email','password']);
+
+var user = new User(body);
+
+user.save().then((user)=>{
+  //res.send(user);
+
+  return user.generateAuthToken();
+}).then((token)=>{
+  res.header('x-auth',token).send(user);
+}).catch((e)=>{
+  res.status(400).send(e)
+});
 
 });
 
