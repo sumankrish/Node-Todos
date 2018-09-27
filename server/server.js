@@ -182,7 +182,7 @@ console.log('server 2');
 app.get('/user/me',authenticate,(req,res)=>{
 
 console.log('enter in server');
-res.send(req.Users);
+res.send(req.user);
 
 });
 
@@ -208,6 +208,16 @@ return user.generateAuthToken().then((token)=>{
 
 });
 
+
+app.delete('/user/me/token',authenticate,(req,res)=>{
+
+req.user.removeToken(req.token).then(()=>{
+  res.status(200).send();
+},()=>{
+  res.status(400).send();
+});
+
+});
 
 app.listen(port,()=>{
   console.log(`Server is up and running on ${port}`);

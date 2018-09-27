@@ -5,14 +5,14 @@ var authenticate = (req,res,next)=>{
 
 //console.log('token :',token);
 
-  User.findByToken(token).then((Users)=>{
+  User.findByToken(token).then((user)=>{
 
-  if(!Users){
+  if(!user){
   //  console.log('auth not user');
     return Promise.reject();
   }
 
-req.Users=Users;
+req.user=user;
 req.token=token;
 next();
 
