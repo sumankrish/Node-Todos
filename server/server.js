@@ -186,6 +186,27 @@ res.send(req.Users);
 
 });
 
+app.post('/user/login',(req,res)=>{
+
+
+var body=_.pick(req.body,['email','password']);
+
+User.findByCredentials(body.email,body.password).then((user)=>{
+
+  var tk=user.tokens.token;
+
+  console.log('fffgfgf :',tk);
+
+return user.generateAuthToken().then((token)=>{
+  res.header('X-auth',token).send(user);
+});
+//res.send(user);
+
+}).catch((e)=>{
+  res.status(400).send();
+});
+
+});
 
 
 app.listen(port,()=>{
